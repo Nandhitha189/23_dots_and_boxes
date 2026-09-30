@@ -13,6 +13,17 @@ class Board:
             self.vertical[row][col] = True
         self._update_completed()
 
+    def remove_line(self, orientation, row, col):
+        """Remove a previously placed line for undo functionality."""
+        if orientation == "H":
+            self.horizontal[row][col] = False
+        else:
+            self.vertical[row][col] = False
+
+        # Recalculate completed boxes after removing the line
+        self.completed.clear()
+        self._update_completed()
+
     def _update_completed(self):
         for r in range(self.rows):
             for c in range(self.cols):
@@ -41,6 +52,8 @@ class Board:
                     wall = "|" if self.vertical[r][c] else " "
                     middle.append(wall)
                     if c < self.cols:
-                        middle.append(" " + ("X" if (r, c) in self.completed else " ") + " ")
+                        middle.append(
+                            " " + ("X" if (r, c) in self.completed else " ") + " "
+                        )
                 print("".join(middle))
         print()
